@@ -1273,7 +1273,7 @@ class DiffusionPrior(nn.Module):
         model_mean, posterior_variance, posterior_log_variance = self.noise_scheduler.q_posterior(x_start=x_start, x_t=x, t=t)
         return model_mean, posterior_variance, posterior_log_variance, x_start
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def p_sample(self, x, t, text_cond = None, self_cond = None, clip_denoised = True, cond_scale = 1.):
         b, *_, device = *x.shape, x.device
         model_mean, _, model_log_variance, x_start = self.p_mean_variance(x = x, t = t, text_cond = text_cond, self_cond = self_cond, clip_denoised = clip_denoised, cond_scale = cond_scale)
@@ -1283,7 +1283,7 @@ class DiffusionPrior(nn.Module):
         pred = model_mean + nonzero_mask * (0.5 * model_log_variance).exp() * noise
         return pred, x_start
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def p_sample_loop_ddpm(self, shape, text_cond, cond_scale = 1.):
         batch, device = shape[0], self.device
 
@@ -1304,7 +1304,7 @@ class DiffusionPrior(nn.Module):
 
         return image_embed
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def p_sample_loop_ddim(self, shape, text_cond, *, timesteps, eta = 1., cond_scale = 1.):
         batch, device, alphas, total_timesteps = shape[0], self.device, self.noise_scheduler.alphas_cumprod_prev, self.noise_scheduler.num_timesteps
 
@@ -1368,7 +1368,7 @@ class DiffusionPrior(nn.Module):
 
         return image_embed
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def p_sample_loop(self, *args, timesteps = None, **kwargs):
         timesteps = default(timesteps, self.noise_scheduler.num_timesteps)
         assert timesteps <= self.noise_scheduler.num_timesteps
